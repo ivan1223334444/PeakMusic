@@ -1,0 +1,260 @@
+﻿<Window x:Class="MultimediaPlayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MultimediaPlayer"
+        mc:Ignorable="d"
+        Title="Peak Music" Height="500" Width="900"
+        Loaded="Window_Loaded" Closing="Window_Closing"
+        >
+    <Window.Resources>
+        <local:NameConverter x:Key="converter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="725*"/>
+            <ColumnDefinition Width="169*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Margin="10,10,9.6,10.4" BorderBrush="Black" BorderThickness="1,1,1,1" CornerRadius="8,8,8,8" RenderTransformOrigin="0.502,0.503" Grid.ColumnSpan="2">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">
+                    <GradientStop Color="#434343" Offset="0"/>
+                    <GradientStop Color="#4B79A1" Offset="0.567"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center"
+                    Width="900" Grid.ColumnSpan="2" Margin="-3,0,-3.4,0.4">
+            <Button Content="Open audio file" Name="btnOpenAudioFile" FontWeight="Bold"  Canvas.Left="338" Canvas.Top="137" Width="100"
+                   Height="30"
+                    Foreground="White"
+                    Background="#38ef7d"
+                    Click="BtnOpenAudioFileClick"
+                    >
+                <Button.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="8"/>
+                    </Style>
+                </Button.Resources>
+            </Button>
+            <StackPanel Orientation="Horizontal"
+                        Margin="5"
+                        HorizontalAlignment="Stretch"
+                        >
+                <StackPanel Orientation="Vertical"  Margin="30,7,7,7" HorizontalAlignment="Left">
+                    <Button Name="btnSave" Width="100" Height="30"  Background="Transparent" BorderThickness="0" 
+                    Canvas.Left="107" Canvas.Top="71" Click="BtnSavePlaylistClick" Margin="30,7,7,7"  HorizontalAlignment="Left" >
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Icon/download.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                            <TextBlock Margin="10,0,0,0" Text="Save playlist"  VerticalAlignment="Center" Foreground="White"></TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button  HorizontalAlignment="Left" Name="btnLoad" Width="103" Height="30"  Background="Transparent" BorderThickness="0" 
+                    Canvas.Left="107" Canvas.Top="71" Margin="30,7,7,7" Click="BtnLoadplaylistClick">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Icon/loading.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                            <TextBlock Margin="10,0,0,0" Text="Load playlist"  VerticalAlignment="Center" Foreground="White"></TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button  Name="btnSaveState" Width="100" Height="30"  Background="Transparent" BorderThickness="0" 
+                    Canvas.Left="107" Canvas.Top="71"  Margin="30,7,7,7" Click="BtnSaveStateClick">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Icon/save-state.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                            <TextBlock Margin="10,0,0,0" Text="Save state"  VerticalAlignment="Center" Foreground="White"></TextBlock>
+                        </StackPanel>
+                    </Button>
+                    <Button  Name="btnLoadState" Width="103" Height="30"  Background="Transparent" BorderThickness="0" 
+                    Canvas.Left="107" Canvas.Top="71"  Margin="30,7,7,7" Click="BtnLoadStateClick">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Icon/load-state.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                            <TextBlock Margin="10,0,0,0" Text="Load state"  VerticalAlignment="Center" Foreground="White"></TextBlock>
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+                <ListView BorderThickness="0" Name="PlayList" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Width="250" Height="275"
+                      Background="Transparent" Margin="100,7,70,7" SelectionChanged="PlayList_SelectionChanged" 
+                      >
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Remove" Click="btnDeleteOneSongClick"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="10 0 0 0">
+                                    <TextBlock TextWrapping="Wrap"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Text="{Binding Name}"
+                                 FontWeight="Bold"
+                                 Foreground="White"
+                                 />
+                                </StackPanel>
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <StackPanel Name="NowPlayingInfo" Orientation="Vertical" Width="250" Margin="30,0,0,0"  VerticalAlignment="Center">
+                    <Image Source="Icon/compact-disc.png"
+                       RenderTransformOrigin=".5,.5"
+                       HorizontalAlignment="Center"
+                       Width="150"
+                        Height="150"
+                       RenderOptions.BitmapScalingMode="HighQuality"
+                       >
+                        <Image.RenderTransform>
+                            <RotateTransform x:Name="AnimatedRotateTransform" Angle="0" />
+                        </Image.RenderTransform>
+                    </Image>
+                    <StackPanel Orientation="Horizontal" Margin="40,10,40,10">
+                        <TextBlock Text="Playing:" FontWeight="Bold" Foreground="White" />
+                        <TextBlock x:Name="SongNamePlaying" Foreground="White" Margin="15,0,0,0" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"  Margin="40,0,40,0">
+                        <TextBlock Text="Total:" FontWeight="Bold" Foreground="White" />
+                        <TextBlock x:Name="TotalSongNumber" Margin="15,0,0,0" Foreground="White" />
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <Canvas Height="140" Width="400" HorizontalAlignment="Center" Margin="250,0" >
+                <Canvas.Triggers>
+                    
+                    <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnPlay">
+                        <BeginStoryboard x:Name="MyBeginStoryboard">
+                            <Storyboard >
+                                <DoubleAnimation Storyboard.TargetName="AnimatedRotateTransform" 
+                            Storyboard.TargetProperty="Angle" 
+                            By="0.1"        
+                            To="19999" 
+                            Duration="0:1:1.5" 
+                            RepeatBehavior="Forever" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    
+                    <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnStopAll">
+                        <StopStoryboard BeginStoryboardName="MyBeginStoryboard" />
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btnPause">
+                        <PauseStoryboard BeginStoryboardName="MyBeginStoryboard" />
+                    </EventTrigger>
+                </Canvas.Triggers>
+                <Button x:Name="btnPrevious" Width="30" Height="30"  Background="Transparent" BorderThickness="0" 
+                    Canvas.Left="107" Canvas.Top="71" Click="BtnPreClick">
+                    <Image Source="Icon/previous-button.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <Button  x:Name="btnPlay" Width="50" Height="50" Background="Transparent" BorderThickness="2" BorderBrush="Black" 
+                     Canvas.Left="173" Canvas.Top="61" Click="BtnPlayClick" >
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="50"/>
+                        </Style>
+                    </Button.Resources>
+                    <Image Source="Icon/play-button.png" Height="24" Width="21"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <Button  x:Name="btnPause" Width="50" Height="50" Background="Transparent" BorderThickness="2" BorderBrush="Black"
+                      Canvas.Left="173" Canvas.Top="61"   Click="BtnPauseClick" Visibility="Hidden">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="50"/>
+                        </Style>
+                    </Button.Resources>
+                    <Image Source="Icon/pause-button.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <Button  x:Name="btnNext" Width="30" Height="30"  Background="Transparent" BorderThickness="0"
+                         Canvas.Left="255" Canvas.Top="71"
+                     Click="BtnNextClick">
+                    <Image Source="Icon/next-button.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <Button  x:Name="btnShuffleDisable" Width="30" Height="30"  Background="Transparent" BorderThickness="0"
+                         Canvas.Left="10" Canvas.Top="71"
+                     Click="BtnShuffleDisableClick" >
+                    <Image Source="Icon/shuffle-disabled.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <Button  x:Name="btnShuffleEnable" Width="30" Height="30"  Background="Transparent" BorderThickness="0" 
+                         Canvas.Left="10" Canvas.Top="71"
+                     Click="BtnShuffleEnableClick" Visibility="Hidden">
+                    <Image Source="Icon/shuffle-enabled-button.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <Button  x:Name="btnLoopDisable" Width="30" Height="30"  Background="Transparent" BorderThickness="0" 
+                         Canvas.Left="360" Canvas.Top="71"
+                     Click="BtnLoopDisableClick" >
+                    <Image Source="Icon/loop-disabled.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <TextBlock Foreground="White" VerticalAlignment="Center" Canvas.Left="415" Canvas.Top="77"  >Volume</TextBlock>
+                <Slider Name="volumeSlider" VerticalAlignment="Center" ValueChanged="ChangeMediaVolume" 
+       Minimum="0" Maximum="1" Value="0.5" Width="100" Canvas.Left="415" Canvas.Top="93"/>
+                <Button  x:Name="btnLoopAll" Width="30" Height="30"  Background="Transparent" BorderThickness="0" 
+                          Canvas.Left="360" Canvas.Top="71" Visibility="Hidden"
+                     Click="BtnLoopAllClick" >
+                    <Image Source="Icon/loop-all.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <Button  x:Name="btnLoopOne" Width="30" Height="30"  Background="Transparent" BorderThickness="0" 
+                          Canvas.Left="360" Canvas.Top="71"
+                          Visibility="Hidden"
+                     Click="BtnLoopOneClick" >
+                    <Image Source="Icon/loop-one.png" Height="24" Width="24"  
+                        HorizontalAlignment="Center"
+                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                </Button>
+                <Button Content="Stop" x:Name="btnStopAll" FontWeight="Bold" Width="100"
+                   Height="30"
+                    Foreground="White"
+                    Background="#ba0f0f"
+                    Visibility="Hidden"
+                    Click="BtnStopClick"
+                        Canvas.Left="150"
+                    >
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <StatusBar Canvas.Top="35"  Background="Transparent">
+                    <TextBlock x:Name="lblProgressStatus" Foreground="White"><Run Text="00:00"/></TextBlock>
+                    <Slider x:Name="sliProgress" Thumb.DragStarted="sliProgress_DragStarted"
+                            Thumb.DragCompleted="sliProgress_DragCompleted" 
+                            ValueChanged="sliProgress_ValueChanged"
+                            Canvas.Top="37" Width="432" />
+                    <TextBlock x:Name="totalTime" Foreground="White"><Run Text="00:00"/></TextBlock>
+                </StatusBar>
+            </Canvas>
+        </StackPanel>
+    </Grid>
+</Window>
